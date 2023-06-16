@@ -38,3 +38,9 @@ export type ICow = {
 };
 
 export type cowModel = Model<ICow>;
+
+export type ICowFilters = {
+  searchTerm?: string;
+  minPrice?: string;
+  maxPrice?: string;
+};
