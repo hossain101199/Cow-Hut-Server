@@ -1,1 +1,1 @@
-# Aitch university auth service
+# Cow hut
