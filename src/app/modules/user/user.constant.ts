@@ -1,7 +1,6 @@
 export const userRole = ['seller', 'buyer'];
 export const userFilterableFields = [
   'searchTerm',
-  '_id',
   'role',
   'name.firstName',
   'name.lastName',
@@ -11,7 +10,6 @@ export const userFilterableFields = [
   'income',
 ];
 export const userSearchableFields = [
-  '_id',
   'role',
   'name.firstName',
   'name.lastName',
