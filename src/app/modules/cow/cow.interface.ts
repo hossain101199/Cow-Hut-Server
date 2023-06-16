@@ -25,6 +25,7 @@ export enum category {
 }
 
 export type ICow = {
+  populate(arg0: string): unknown;
   name: string;
   age: number;
   price: number;

@@ -4,11 +4,7 @@ const router = express.Router();
 
 router.get('/:id', userController.getSingleUser);
 
-router.patch(
-  '/:id',
-
-  userController.updateUser
-);
+router.patch('/:id', userController.updateUser);
 
 router.delete('/:id', userController.deleteUser);
 

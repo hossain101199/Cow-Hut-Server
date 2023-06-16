@@ -16,6 +16,29 @@ const createCow: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleCow: RequestHandler = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await cowService.getSingleCowFromDB(id);
+
+  if (result === null) {
+    sendResponse<ICow>(res, {
+      statusCode: 404,
+      success: false,
+      message: `Error: Cow with ID ${id} is not found. Please verify the provided ID and try again`,
+      data: result,
+    });
+  } else {
+    sendResponse<ICow>(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Cow retrieved successfully',
+      data: result,
+    });
+  }
+});
+
 export const cowController = {
   createCow,
+  getSingleCow,
 };
