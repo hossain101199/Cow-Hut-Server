@@ -7,7 +7,7 @@ router.post('/', verifySeller, cowController.createCow);
 
 router.get('/:id', cowController.getSingleCow);
 
-// router.patch('/:id', cowController.;
+router.patch('/:id', cowController.updateCow);
 
 // router.delete('/:id', cowController);
 

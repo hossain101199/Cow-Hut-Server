@@ -38,7 +38,31 @@ const getSingleCow: RequestHandler = catchAsync(async (req, res) => {
   }
 });
 
+const updateCow: RequestHandler = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const updatedData = req.body;
+
+  const result = await cowService.updateCowInDB(id, updatedData);
+
+  if (result === null) {
+    sendResponse<ICow>(res, {
+      statusCode: 404,
+      success: false,
+      message: `Error: Cow with ID ${id} is not found. Please verify the provided ID and try again`,
+      data: result,
+    });
+  } else {
+    sendResponse<ICow>(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Cow updated successfully',
+      data: result,
+    });
+  }
+});
+
 export const cowController = {
   createCow,
   getSingleCow,
+  updateCow,
 };
