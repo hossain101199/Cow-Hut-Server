@@ -44,8 +44,14 @@ const updateCowInDB = async (
   return result;
 };
 
+const deleteCowFromDB = async (id: string): Promise<ICow | null> => {
+  const result = await cow.findByIdAndDelete(id).populate('seller');
+  return result;
+};
+
 export const cowService = {
   createCowInDB,
   getSingleCowFromDB,
   updateCowInDB,
+  deleteCowFromDB,
 };

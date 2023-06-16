@@ -9,7 +9,7 @@ router.get('/:id', cowController.getSingleCow);
 
 router.patch('/:id', cowController.updateCow);
 
-// router.delete('/:id', cowController);
+router.delete('/:id', cowController.deleteCow);
 
 // router.get('/', cowController);
 
