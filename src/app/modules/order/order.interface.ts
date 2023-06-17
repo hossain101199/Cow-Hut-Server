@@ -6,3 +6,7 @@ export type IOrder = {
   cow: Types.ObjectId | ICow;
   buyer: Types.ObjectId | IUser;
 };
+
+export type IOrderFilters = {
+  searchTerm?: string;
+};

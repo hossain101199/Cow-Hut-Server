@@ -5,12 +5,6 @@ const router = express.Router();
 
 router.post('/', orderController.createOrder);
 
-router.get('/:id');
-
-router.patch('/:id');
-
-router.delete('/:id');
-
-router.get('/');
+router.get('/', orderController.getAllOrders);
 
 export const orderRoutes = router;
