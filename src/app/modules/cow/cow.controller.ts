@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import { paginationFields } from '../../../constants/pagination';
+import ApiError from '../../../errors/ApiError';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
@@ -25,12 +26,10 @@ const getSingleCow: RequestHandler = catchAsync(async (req, res) => {
   const result = await cowService.getSingleCowFromDB(id);
 
   if (result === null) {
-    sendResponse<ICow>(res, {
-      statusCode: 404,
-      success: false,
-      message: `Error: Cow with ID ${id} is not found. Please verify the provided ID and try again`,
-      data: result,
-    });
+    throw new ApiError(
+      404,
+      `Error: Cow with ID ${id} is not found. Please verify the provided ID and try again`
+    );
   } else {
     sendResponse<ICow>(res, {
       statusCode: 200,
@@ -48,12 +47,10 @@ const updateCow: RequestHandler = catchAsync(async (req, res) => {
   const result = await cowService.updateCowInDB(id, updatedData);
 
   if (result === null) {
-    sendResponse<ICow>(res, {
-      statusCode: 404,
-      success: false,
-      message: `Error: Cow with ID ${id} is not found. Please verify the provided ID and try again`,
-      data: result,
-    });
+    throw new ApiError(
+      404,
+      `Error: Cow with ID ${id} is not found. Please verify the provided ID and try again`
+    );
   } else {
     sendResponse<ICow>(res, {
       statusCode: 200,
@@ -70,12 +67,10 @@ const deleteCow: RequestHandler = catchAsync(async (req, res) => {
   const result = await cowService.deleteCowFromDB(id);
 
   if (result === null) {
-    sendResponse<ICow>(res, {
-      statusCode: 404,
-      success: false,
-      message: `Error: Cow with ID ${id} is not found. Please verify the provided ID and try again`,
-      data: result,
-    });
+    throw new ApiError(
+      404,
+      `Error: Cow with ID ${id} is not found. Please verify the provided ID and try again`
+    );
   } else {
     sendResponse<ICow>(res, {
       statusCode: 200,

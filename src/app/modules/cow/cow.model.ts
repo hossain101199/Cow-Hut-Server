@@ -15,6 +15,9 @@ const cowSchema = new Schema<ICow>(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
   }
 );
 
