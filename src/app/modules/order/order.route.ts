@@ -1,10 +1,9 @@
 import express from 'express';
-import { verifyBuyer } from '../../middlewares/verifyBuyer';
 import { orderController } from './order.controller';
 
 const router = express.Router();
 
-router.post('/', verifyBuyer, orderController.createOrder);
+router.post('/', orderController.createOrder);
 
 router.get('/:id');
 

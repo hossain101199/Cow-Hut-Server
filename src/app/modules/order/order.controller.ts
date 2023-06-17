@@ -5,8 +5,8 @@ import { IOrder } from './order.interface';
 import { orderService } from './order.service';
 
 const createOrder: RequestHandler = catchAsync(async (req, res) => {
-  const Order = req.body;
-  const result = await orderService.createOrderInDB(Order);
+  const order = req.body;
+  const result = await orderService.createOrderInDB(order);
 
   sendResponse<IOrder>(res, {
     statusCode: 200,
