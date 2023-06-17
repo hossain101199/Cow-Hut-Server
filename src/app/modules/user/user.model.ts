@@ -7,10 +7,10 @@ const userSchema = new Schema<IUser>(
     password: { type: String, required: true },
     role: { type: String, enum: userRole, required: true },
     name: {
-      firstName: { type: String, required: true, unique: true },
+      firstName: { type: String, required: true },
       lastName: { type: String, required: true },
     },
-    phoneNumber: { type: String, required: true },
+    phoneNumber: { type: String, required: true, unique: true },
     address: { type: String, required: true },
     budget: { type: Number, required: true },
     income: { type: Number, default: 0 },
@@ -19,6 +19,9 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
     toJSON: {
       virtuals: true,
+      transform: function (doc, ret) {
+        delete ret.password;
+      },
     },
   }
 );

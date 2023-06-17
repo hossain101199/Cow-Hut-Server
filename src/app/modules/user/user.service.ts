@@ -70,7 +70,7 @@ const getAllUsersFromDB = async (
     .skip(skip)
     .limit(limit);
 
-  const total = await user.countDocuments(whereConditions).limit(limit);
+  const total = await user.countDocuments(whereConditions);
   return {
     meta: {
       page,
