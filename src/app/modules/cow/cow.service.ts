@@ -24,21 +24,23 @@ const updateCowInDB = async (
 ): Promise<ICow | null> => {
   const userId = payload.seller;
 
-  // user from the database
-  const seller = await user.findById(userId);
+  if (userId) {
+    // user from the database
+    const seller = await user.findById(userId);
 
-  if (!seller) {
-    // User not found
-    throw new ApiError(
-      404,
-      `Error: User with ID ${userId} is not found. Please verify the provided ID and try again`
-    );
-  }
+    if (!seller) {
+      // User not found
+      throw new ApiError(
+        404,
+        `Error: User with ID ${userId} is not found. Please verify the provided ID and try again`
+      );
+    }
 
-  // Check the user's role
-  if (seller?.role !== 'seller') {
-    // User is a buyer or seller
-    throw new ApiError(403, `Error: Invalid user role`);
+    // Check the user's role
+    if (seller.role !== 'seller') {
+      // User is a buyer or seller
+      throw new ApiError(403, `Error: Invalid user role`);
+    }
   }
 
   const result = await cow
