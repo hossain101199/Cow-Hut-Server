@@ -31,7 +31,6 @@
   "address": "777 Maple St",
   "budget": 4500,
 }
-
 ```
 
 ## Endpoint: GET api/vi/users
@@ -100,5 +99,104 @@
 - Endpoint: GET api/vi//users/648e25d782659a50fb5500b2
 
 ## Endpoint: POST api/vi/cows
+
+**Description:** This endpoint is used to create a new cow.
+
+**Request Body:**
+
+```
+{
+  "name": "Cow 40",
+  "age": 2,
+  "price": 2000,
+  "location": "Mymensingh",
+  "breed": "Guernsey",
+  "weight": 480,
+  "label": "for sale",
+  "category": "Dairy",
+  "seller": "648e25c082659a50fb5500ae"
+}
+```
+
+```
+{
+  "name": "Cow 39",
+  "age": 4,
+  "price": 2200,
+  "location": "Rangpur",
+  "breed": "Limousin",
+  "weight": 550,
+  "label": "for sale",
+  "category": "Dairy",
+  "seller": "648e25d782659a50fb5500b2"
+}
+```
+
+## Endpoint: GET api/vi/cows
+
+**Description:** This endpoint is used to retrieve a list of cows based on specified filters and pagination options.
+
+**Query Parameters:**
+
+**Query Parameters:**
+
+- `searchTerm` : Search term to filter cows by specific fields.
+- `location` : Filter cows by location.
+- `minPrice` : Filter cows by minimum price.
+- `maxPrice` : Filter cows by maximum price.
+- `page` : Page number for pagination.
+- `limit` : Number of results to include per page.
+- `sortBy` : Field to sort the results by.
+- `sortOrder` : Sort order for the results (asc for ascending, desc for descending).
+
+**Example Request:**
+
+- Endpoint: GET api/vi/cows?location=Rangpur
+- Endpoint: GET api/vi//cows?searchTerm=Dairy
+- Endpoint: GET api/vi/cows?minPrice=1000&maxPrice=2000
+- Endpoint: GET api/vi/cows?page=1&limit=11&sortBy=price&sortOrder=desc
+
+---
+
+## Endpoint: GET api/vi/cows/:id
+
+**Description:** This endpoint is used to retrieve a single cow by their ID.
+
+**Example Request:**
+
+- Endpoint: GET api/vi/cows/648e2889c0c0f820ca1307c4
+- Endpoint: GET api/vi//cows/648e2876c0c0f820ca1307c0
+
+## Endpoint: PATCH api/vi/cows/:id
+
+**Description:** This endpoint is used to update a cow by their ID.
+
+**Example Request:**
+
+- Endpoint: GET api/vi/cows/648e2889c0c0f820ca1307c4
+- Endpoint: GET api/vi//cows/648e2876c0c0f820ca1307c0
+
+**Request Body:**
+
+```
+{
+  "price": 1800,
+}
+```
+
+```
+{
+  "age": 20,
+}
+```
+
+## Endpoint: DELETE api/vi/cows/:id
+
+**Description:** This endpoint is used to delete a cow by their ID.
+
+**Example Request:**
+
+- Endpoint: GET api/vi/cows/648e2889c0c0f820ca1307c4
+- Endpoint: GET api/vi//cows/648e2876c0c0f820ca1307c0
 
 ## Endpoint: POST api/vi/orders
