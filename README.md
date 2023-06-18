@@ -138,8 +138,6 @@
 
 **Query Parameters:**
 
-**Query Parameters:**
-
 - `searchTerm` : Search term to filter cows by specific fields.
 - `location` : Filter cows by location.
 - `minPrice` : Filter cows by minimum price.
@@ -200,3 +198,25 @@
 - Endpoint: GET api/vi//cows/648e2876c0c0f820ca1307c0
 
 ## Endpoint: POST api/vi/orders
+
+**Description:** This endpoint allows you to create a new order.
+
+**Request Body:**
+
+```
+{
+    "cow": "648e2889c0c0f820ca1307c4",
+    "buyer": "648e1c611e198cfd20321fad"
+}
+```
+
+- `cow` : The ID of the cow being purchased.
+- `buyer` : The ID of the buyer placing the order.
+
+## Endpoint: GET api/vi/orders
+
+**Description:** This endpoint allows you to retrieve a list of all orders.
+
+**Example Request:**
+
+- Endpoint: GET api/vi/orders
