@@ -58,6 +58,47 @@
 - Endpoint: GET api/vi/users?page=1&limit=9&sortBy=name.firstName&sortOrder=asc
 - Endpoint: GET api/vi/users?role=buyer&limit=20&page=2&sortBy=name.firstName&sortOrder=asc
 
+## Endpoint: GET api/vi/users/:id
+
+**Description:** This endpoint is used to retrieve a single user by their ID.
+
+**Example Request:**
+
+- Endpoint: GET api/vi/users/648e25f482659a50fb5500b8
+- Endpoint: GET api/vi//users/648e25d782659a50fb5500b2
+
+## Endpoint: PATCH api/vi/users/:id
+
+**Description:** This endpoint is used to update a user by their ID.
+
+**Example Request:**
+
+- Endpoint: GET api/vi/users/648e25f482659a50fb5500b8
+- Endpoint: GET api/vi//users/648e25d782659a50fb5500b2
+
+**Request Body:**
+
+```
+{
+  "password": "password25",
+}
+```
+
+```
+{
+  "budget": 5000,
+}
+```
+
+## Endpoint: DELETE api/vi/users/:id
+
+**Description:** This endpoint is used to delete a user by their ID.
+
+**Example Request:**
+
+- Endpoint: GET api/vi/users/648e25f482659a50fb5500b8
+- Endpoint: GET api/vi//users/648e25d782659a50fb5500b2
+
 ## Endpoint: POST api/vi/cows
 
 ## Endpoint: POST api/vi/orders
