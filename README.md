@@ -1,6 +1,6 @@
 # Cow hut API Documentation:
 
-## Endpoint: POST api/vi/auth/signup
+## Endpoint: POST https://cow-hut-hossain101199.vercel.app/api/vi/auth/signup
 
 **Description:** This endpoint is used to sign up and create a new user.
 
@@ -33,7 +33,7 @@
 }
 ```
 
-## Endpoint: GET api/vi/users
+## Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/users
 
 **Description:** This endpoint is used to retrieve a list of users.
 
@@ -52,28 +52,28 @@
 
 **Example Request:**
 
-- Endpoint: GET api/vi/users?role=seller
-- Endpoint: GET api/vi//users?searchTerm=john
-- Endpoint: GET api/vi/users?page=1&limit=9&sortBy=name.firstName&sortOrder=asc
-- Endpoint: GET api/vi/users?role=buyer&limit=20&page=2&sortBy=name.firstName&sortOrder=asc
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/users?role=seller
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi//users?searchTerm=john
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/users?page=1&limit=9&sortBy=name.firstName&sortOrder=asc
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/users?role=buyer&limit=20&page=2&sortBy=name.firstName&sortOrder=asc
 
-## Endpoint: GET api/vi/users/:id
+## Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/users/:id
 
 **Description:** This endpoint is used to retrieve a single user by their ID.
 
 **Example Request:**
 
-- Endpoint: GET api/vi/users/648e25f482659a50fb5500b8
-- Endpoint: GET api/vi//users/648e25d782659a50fb5500b2
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/users/648e25f482659a50fb5500b8
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi//users/648e25d782659a50fb5500b2
 
-## Endpoint: PATCH api/vi/users/:id
+## Endpoint: PATCH https://cow-hut-hossain101199.vercel.app/api/vi/users/:id
 
 **Description:** This endpoint is used to update a user by their ID.
 
 **Example Request:**
 
-- Endpoint: GET api/vi/users/648e25f482659a50fb5500b8
-- Endpoint: GET api/vi//users/648e25d782659a50fb5500b2
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/users/648e25f482659a50fb5500b8
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi//users/648e25d782659a50fb5500b2
 
 **Request Body:**
 
@@ -89,16 +89,16 @@
 }
 ```
 
-## Endpoint: DELETE api/vi/users/:id
+## Endpoint: DELETE https://cow-hut-hossain101199.vercel.app/api/vi/users/:id
 
 **Description:** This endpoint is used to delete a user by their ID.
 
 **Example Request:**
 
-- Endpoint: GET api/vi/users/648e25f482659a50fb5500b8
-- Endpoint: GET api/vi//users/648e25d782659a50fb5500b2
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/users/648e25f482659a50fb5500b8
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi//users/648e25d782659a50fb5500b2
 
-## Endpoint: POST api/vi/cows
+## Endpoint: POST https://cow-hut-hossain101199.vercel.app/api/vi/cows
 
 **Description:** This endpoint is used to create a new cow.
 
@@ -132,7 +132,7 @@
 }
 ```
 
-## Endpoint: GET api/vi/cows
+## Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/cows
 
 **Description:** This endpoint is used to retrieve a list of cows based on specified filters and pagination options.
 
@@ -142,6 +142,7 @@
 - `location` : Filter cows by location.
 - `minPrice` : Filter cows by minimum price.
 - `maxPrice` : Filter cows by maximum price.
+- `label` : Filter cows by label.
 - `page` : Page number for pagination.
 - `limit` : Number of results to include per page.
 - `sortBy` : Field to sort the results by.
@@ -149,30 +150,30 @@
 
 **Example Request:**
 
-- Endpoint: GET api/vi/cows?location=Rangpur
-- Endpoint: GET api/vi//cows?searchTerm=Dairy
-- Endpoint: GET api/vi/cows?minPrice=1000&maxPrice=2000
-- Endpoint: GET api/vi/cows?page=1&limit=11&sortBy=price&sortOrder=desc
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/cows?location=Rangpur
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi//cows?searchTerm=Dairy
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/cows?minPrice=1000&maxPrice=2000
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/cows?page=1&limit=11&sortBy=price&sortOrder=desc
 
 ---
 
-## Endpoint: GET api/vi/cows/:id
+## Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/cows/:id
 
 **Description:** This endpoint is used to retrieve a single cow by their ID.
 
 **Example Request:**
 
-- Endpoint: GET api/vi/cows/648e2889c0c0f820ca1307c4
-- Endpoint: GET api/vi//cows/648e2876c0c0f820ca1307c0
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/cows/648e2889c0c0f820ca1307c4
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi//cows/648e2876c0c0f820ca1307c0
 
-## Endpoint: PATCH api/vi/cows/:id
+## Endpoint: PATCH https://cow-hut-hossain101199.vercel.app/api/vi/cows/:id
 
 **Description:** This endpoint is used to update a cow by their ID.
 
 **Example Request:**
 
-- Endpoint: GET api/vi/cows/648e2889c0c0f820ca1307c4
-- Endpoint: GET api/vi//cows/648e2876c0c0f820ca1307c0
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/cows/648e2889c0c0f820ca1307c4
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi//cows/648e2876c0c0f820ca1307c0
 
 **Request Body:**
 
@@ -188,16 +189,16 @@
 }
 ```
 
-## Endpoint: DELETE api/vi/cows/:id
+## Endpoint: DELETE https://cow-hut-hossain101199.vercel.app/api/vi/cows/:id
 
 **Description:** This endpoint is used to delete a cow by their ID.
 
 **Example Request:**
 
-- Endpoint: GET api/vi/cows/648e2889c0c0f820ca1307c4
-- Endpoint: GET api/vi//cows/648e2876c0c0f820ca1307c0
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/cows/648e2889c0c0f820ca1307c4
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi//cows/648e2876c0c0f820ca1307c0
 
-## Endpoint: POST api/vi/orders
+## Endpoint: POST https://cow-hut-hossain101199.vercel.app/api/vi/orders
 
 **Description:** This endpoint allows you to create a new order.
 
@@ -213,10 +214,10 @@
 - `cow` : The ID of the cow being purchased.
 - `buyer` : The ID of the buyer placing the order.
 
-## Endpoint: GET api/vi/orders
+## Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/orders
 
 **Description:** This endpoint allows you to retrieve a list of all orders.
 
 **Example Request:**
 
-- Endpoint: GET api/vi/orders
+- Endpoint: GET https://cow-hut-hossain101199.vercel.app/api/vi/orders
