@@ -34,7 +34,29 @@
 
 ```
 
-## Endpoint: POST api/vi/users
+## Endpoint: GET api/vi/users
+
+**Description:** This endpoint is used to retrieve a list of users.
+
+**Query Parameters:**
+
+- `searchTerm` : A search term to filter users based on certain fields.
+- `role` : Filter users by role.
+- `name.firstName` : Filter users by first name.
+- `name.lastName` : Filter users by last name.
+- `phoneNumber` : Filter users by phone number.
+- `address` : Filter users by address.
+- `page` : The page number for pagination. Default is 1.
+- `limit` : The number of users to return per page. Default is 10.
+- `sortBy` : The field to sort the users by.
+- `sortOrder` : The sort order for the users. Valid values are "asc" for ascending and "desc" for descending.
+
+**Example Request:**
+
+- Endpoint: GET api/vi/users?role=seller
+- Endpoint: GET api/vi//users?searchTerm=john
+- Endpoint: GET api/vi/users?page=1&limit=9&sortBy=name.firstName&sortOrder=asc
+- Endpoint: GET api/vi/users?role=buyer&limit=20&page=2&sortBy=name.firstName&sortOrder=asc
 
 ## Endpoint: POST api/vi/cows
 
