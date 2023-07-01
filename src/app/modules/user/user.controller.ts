@@ -28,6 +28,28 @@ const getProfile: RequestHandler = catchAsync(async (req, res) => {
   }
 });
 
+const updateProfile: RequestHandler = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    throw new ApiError(401, 'Unauthorized: No token provided');
+  }
+  const updatedData = req.body;
+
+  const result = await userService.updateProfileInDB(token, updatedData);
+
+  if (result === null) {
+    throw new ApiError(401, `Invalid token`);
+  } else {
+    sendResponse<IUser>(res, {
+      statusCode: 200,
+      success: true,
+      message: "User's information retrieved successfully",
+      data: result,
+    });
+  }
+});
+
 const getSingleUser: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params;
 
@@ -110,6 +132,7 @@ const getAllUsers: RequestHandler = catchAsync(async (req, res) => {
 
 export const userController = {
   getProfile,
+  updateProfile,
   getSingleUser,
   updateUser,
   deleteUser,

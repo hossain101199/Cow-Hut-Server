@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.get('/my-profile', userController.getProfile);
 
+router.patch('/my-profile', userController.updateProfile);
+
 router.get(
   '/:id',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),

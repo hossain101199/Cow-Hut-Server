@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { SortOrder } from 'mongoose';
 import config from '../../../config';
@@ -22,6 +23,47 @@ const getProfileFromDB = async (payload: string): Promise<IUser | null> => {
   }
 };
 
+const updateProfileInDB = async (
+  token: string,
+  payload: IUser
+): Promise<IUser | null> => {
+  const verifiedToken = jwt.verify(
+    token,
+    config.jwt.secret as Secret
+  ) as JwtPayload;
+  const { name, password, ...userData } = payload;
+
+  const updatedUserData: Partial<IUser> = { ...userData };
+
+  if (name && Object.keys(name).length > 0) {
+    Object.keys(name).forEach(key => {
+      const nameKey = `name.${key}` as keyof Partial<IUser>;
+      (updatedUserData as any)[nameKey] = name[key as keyof typeof name];
+    });
+  }
+  if (password) {
+    const hashedPassword = await bcrypt.hash(
+      password,
+      Number(config.bcrypt_salt_rounds)
+    );
+    updatedUserData.password = hashedPassword;
+  }
+
+  if (verifiedToken) {
+    const result = await User.findByIdAndUpdate(
+      verifiedToken.id,
+      updatedUserData,
+      {
+        new: true,
+      }
+    );
+
+    return result;
+  } else {
+    throw new ApiError(403, 'Forbidden');
+  }
+};
+
 const getSingleUserFromDB = async (id: string): Promise<IUser | null> => {
   const result = await User.findById(id);
   return result;
@@ -31,7 +73,26 @@ const updateUserInDB = async (
   id: string,
   payload: IUser
 ): Promise<IUser | null> => {
-  const result = await User.findByIdAndUpdate(id, payload, {
+  const { name, password, ...userData } = payload;
+
+  const updatedUserData: Partial<IUser> = { ...userData };
+
+  if (name && Object.keys(name).length > 0) {
+    Object.keys(name).forEach(key => {
+      const nameKey = `name.${key}` as keyof Partial<IUser>;
+      (updatedUserData as any)[nameKey] = name[key as keyof typeof name];
+    });
+  }
+
+  if (password) {
+    const hashedPassword = await bcrypt.hash(
+      password,
+      Number(config.bcrypt_salt_rounds)
+    );
+    updatedUserData.password = hashedPassword;
+  }
+
+  const result = await User.findByIdAndUpdate(id, updatedUserData, {
     new: true,
   });
   return result;
@@ -98,6 +159,7 @@ const getAllUsersFromDB = async (
 
 export const userService = {
   getProfileFromDB,
+  updateProfileInDB,
   getSingleUserFromDB,
   updateUserInDB,
   deleteUserFromDB,
