@@ -1,8 +1,12 @@
 import bcrypt from 'bcrypt';
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
-import { ILogin, ILoginUserResponse } from '../../../interfaces/common';
+import {
+  ILogin,
+  ILoginUserResponse,
+  IRefreshTokenResponse,
+} from '../../../interfaces/common';
 import { IUser } from '../user/user.interface';
 import { User } from '../user/user.model';
 
@@ -25,7 +29,7 @@ const loginUser = async (payload: ILogin): Promise<ILoginUserResponse> => {
 
   const isUserExist = await User.findOne(
     { phoneNumber },
-    { id: 1, role: 1, password: 1 }
+    { id: 1, role: 1, phoneNumber: 1, password: 1 }
   );
 
   if (isUserExist) {
@@ -36,6 +40,7 @@ const loginUser = async (payload: ILogin): Promise<ILoginUserResponse> => {
         {
           id,
           role,
+          phoneNumber,
         },
         config.jwt.secret as Secret,
         { expiresIn: config.jwt.expires_in }
@@ -45,6 +50,7 @@ const loginUser = async (payload: ILogin): Promise<ILoginUserResponse> => {
         {
           id,
           role,
+          phoneNumber,
         },
         config.jwt.refresh_secret as Secret,
         { expiresIn: config.jwt.refresh_expires_in }
@@ -61,7 +67,48 @@ const loginUser = async (payload: ILogin): Promise<ILoginUserResponse> => {
     throw new ApiError(404, 'User does not exist');
   }
 };
+
+const refreshToken = async (
+  payload: string
+): Promise<IRefreshTokenResponse> => {
+  // invalid token - synchronous
+  let verifiedToken = null;
+
+  try {
+    verifiedToken = jwt.verify(
+      payload,
+      config.jwt.refresh_secret as Secret
+    ) as JwtPayload;
+  } catch (err) {
+    throw new ApiError(403, 'Invalid Refresh Token');
+  }
+
+  const { phoneNumber } = verifiedToken;
+
+  const isUserExist = await User.findOne(
+    { phoneNumber },
+    { id: 1, role: 1, phoneNumber: 1, password: 1 }
+  );
+
+  if (!isUserExist) {
+    throw new ApiError(404, 'User does not exist');
+  }
+
+  const newAccessToken = jwt.sign(
+    {
+      id: isUserExist.id,
+      role: isUserExist.role,
+    },
+    config.jwt.secret as Secret,
+    { expiresIn: config.jwt.expires_in }
+  );
+
+  return {
+    accessToken: newAccessToken,
+  };
+};
 export const authService = {
   createUserInDB,
   loginUser,
+  refreshToken,
 };

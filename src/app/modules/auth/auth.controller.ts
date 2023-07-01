@@ -1,6 +1,9 @@
 import { RequestHandler } from 'express';
 import config from '../../../config';
-import { ILoginUserResponse } from '../../../interfaces/common';
+import {
+  ILoginUserResponse,
+  IRefreshTokenResponse,
+} from '../../../interfaces/common';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { IUser } from '../user/user.interface';
@@ -42,7 +45,21 @@ const loginUser: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const refreshToken: RequestHandler = catchAsync(async (req, res) => {
+  const { refreshToken } = req.cookies;
+
+  const result = await authService.refreshToken(refreshToken);
+
+  sendResponse<IRefreshTokenResponse>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Token has been refreshed',
+    data: result,
+  });
+});
+
 export const authController = {
   createUser,
   loginUser,
+  refreshToken,
 };
