@@ -1,4 +1,5 @@
 import express from 'express';
+import { adminRoutes } from '../modules/admin/admin.route';
 import { authRoutes } from '../modules/auth/auth.route';
 import { cowRoutes } from '../modules/cow/cow.route';
 import { orderRoutes } from '../modules/order/order.route';
@@ -22,6 +23,10 @@ const moduleRoutes = [
   {
     path: '/orders',
     route: orderRoutes,
+  },
+  {
+    path: '/admins',
+    route: adminRoutes,
   },
 ];
 

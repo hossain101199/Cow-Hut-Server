@@ -14,3 +14,13 @@ export type IGenericErrorResponse = {
   message: string;
   errorMessages: IGenericErrorMessage[];
 };
+
+export type ILogin = {
+  phoneNumber: string;
+  password: string;
+};
+
+export type ILoginUserResponse = {
+  accessToken: string;
+  refreshToken?: string;
+};

@@ -1,4 +1,6 @@
+import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
+import config from '../../../config';
 import { userRole } from './user.constant';
 import { IUser } from './user.interface';
 
@@ -26,4 +28,16 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-export const user = model<IUser>('user', userSchema);
+// This code is executed before saving a user document to the database
+userSchema.pre('save', async function (next) {
+  // Hash the password using bcrypt
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+
+  // Call the next middleware or save the document
+  next();
+});
+
+export const User = model<IUser>('user', userSchema);

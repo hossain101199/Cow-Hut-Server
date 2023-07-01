@@ -1,5 +1,3 @@
-import { Model } from 'mongoose';
-
 // User interface
 export type IUserName = {
   firstName: string;
@@ -15,8 +13,6 @@ export type IUser = {
   budget: number;
   income: number;
 };
-
-export type userModel = Model<IUser>;
 
 export type IUserFilters = {
   searchTerm?: string;

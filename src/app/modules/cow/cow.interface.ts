@@ -1,4 +1,4 @@
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { IUser } from '../user/user.interface';
 
 // cow.interface.ts
@@ -35,8 +35,6 @@ export type ICow = {
   category: category;
   seller: Types.ObjectId | IUser;
 };
-
-export type cowModel = Model<ICow>;
 
 export type ICowFilters = {
   searchTerm?: string;
