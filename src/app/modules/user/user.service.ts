@@ -1,10 +1,26 @@
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { SortOrder } from 'mongoose';
+import config from '../../../config';
+import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { userSearchableFields } from './user.constant';
 import { IUser, IUserFilters } from './user.interface';
 import { User } from './user.model';
+
+const getProfileFromDB = async (payload: string): Promise<IUser | null> => {
+  const verifiedToken = jwt.verify(
+    payload,
+    config.jwt.secret as Secret
+  ) as JwtPayload;
+  if (verifiedToken) {
+    const result = await User.findById(verifiedToken.id);
+    return result;
+  } else {
+    throw new ApiError(403, 'Forbidden');
+  }
+};
 
 const getSingleUserFromDB = async (id: string): Promise<IUser | null> => {
   const result = await User.findById(id);
@@ -81,6 +97,7 @@ const getAllUsersFromDB = async (
 };
 
 export const userService = {
+  getProfileFromDB,
   getSingleUserFromDB,
   updateUserInDB,
   deleteUserFromDB,

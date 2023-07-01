@@ -4,6 +4,8 @@ import auth from '../../middlewares/auth';
 import { userController } from './user.controller';
 const router = express.Router();
 
+router.get('/my-profile', userController.getProfile);
+
 router.get(
   '/:id',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
