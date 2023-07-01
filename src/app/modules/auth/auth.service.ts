@@ -29,7 +29,7 @@ const loginUser = async (payload: ILogin): Promise<ILoginUserResponse> => {
 
   const isUserExist = await User.findOne(
     { phoneNumber },
-    { id: 1, role: 1, phoneNumber: 1, password: 1 }
+    { id: 1, role: 1, password: 1 }
   );
 
   if (isUserExist) {
@@ -40,7 +40,6 @@ const loginUser = async (payload: ILogin): Promise<ILoginUserResponse> => {
         {
           id,
           role,
-          phoneNumber,
         },
         config.jwt.secret as Secret,
         { expiresIn: config.jwt.expires_in }
@@ -50,7 +49,6 @@ const loginUser = async (payload: ILogin): Promise<ILoginUserResponse> => {
         {
           id,
           role,
-          phoneNumber,
         },
         config.jwt.refresh_secret as Secret,
         { expiresIn: config.jwt.refresh_expires_in }
@@ -83,12 +81,9 @@ const refreshToken = async (
     throw new ApiError(403, 'Invalid Refresh Token');
   }
 
-  const { phoneNumber } = verifiedToken;
+  const { id } = verifiedToken;
 
-  const isUserExist = await User.findOne(
-    { phoneNumber },
-    { id: 1, role: 1, phoneNumber: 1, password: 1 }
-  );
+  const isUserExist = await User.findById(id, { id: 1, role: 1 });
 
   if (!isUserExist) {
     throw new ApiError(404, 'User does not exist');
