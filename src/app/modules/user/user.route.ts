@@ -1,13 +1,31 @@
 import express from 'express';
+import { ENUM_USER_ROLE } from '../../../enums/user';
+import auth from '../../middlewares/auth';
 import { userController } from './user.controller';
 const router = express.Router();
 
-router.get('/:id', userController.getSingleUser);
+router.get(
+  '/:id',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  userController.getSingleUser
+);
 
-router.patch('/:id', userController.updateUser);
+router.patch(
+  '/:id',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  userController.updateUser
+);
 
-router.delete('/:id', userController.deleteUser);
+router.delete(
+  '/:id',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  userController.deleteUser
+);
 
-router.get('/', userController.getAllUsers);
+router.get(
+  '/',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  userController.getAllUsers
+);
 
 export const userRoutes = router;

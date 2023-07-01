@@ -4,10 +4,10 @@ import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { userSearchableFields } from './user.constant';
 import { IUser, IUserFilters } from './user.interface';
-import { user } from './user.model';
+import { User } from './user.model';
 
 const getSingleUserFromDB = async (id: string): Promise<IUser | null> => {
-  const result = await user.findById(id);
+  const result = await User.findById(id);
   return result;
 };
 
@@ -15,14 +15,14 @@ const updateUserInDB = async (
   id: string,
   payload: IUser
 ): Promise<IUser | null> => {
-  const result = await user.findByIdAndUpdate(id, payload, {
+  const result = await User.findByIdAndUpdate(id, payload, {
     new: true,
   });
   return result;
 };
 
 const deleteUserFromDB = async (id: string): Promise<IUser | null> => {
-  const result = await user.findByIdAndDelete(id);
+  const result = await User.findByIdAndDelete(id);
   return result;
 };
 
@@ -64,13 +64,12 @@ const getAllUsersFromDB = async (
     sortConditions[sortBy] = sortOrder;
   }
 
-  const result = await user
-    .find(whereConditions)
+  const result = await User.find(whereConditions)
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
 
-  const total = await user.countDocuments(whereConditions);
+  const total = await User.countDocuments(whereConditions);
   return {
     meta: {
       page,
