@@ -1,15 +1,13 @@
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { SortOrder } from 'mongoose';
-import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 
 import config from '../../../config';
-import { User } from '../user/user.model';
 import { cowSearchableFields } from './cow.constant';
 import { ICow, ICowFilters } from './cow.interface';
-import { cow } from './cow.model';
+import { Cow } from './cow.model';
 
 const createCowInDB = async (token: string, payload: ICow): Promise<ICow> => {
   const verifiedToken = jwt.verify(
@@ -19,50 +17,38 @@ const createCowInDB = async (token: string, payload: ICow): Promise<ICow> => {
 
   payload.seller = verifiedToken.id;
 
-  const createdCow = (await cow.create(payload)).populate('seller');
+  const createdCow = (await Cow.create(payload)).populate('seller');
   return createdCow;
 };
 
 const getSingleCowFromDB = async (id: string): Promise<ICow | null> => {
-  const result = await cow.findById(id).populate('seller');
+  const result = await Cow.findById(id).populate('seller');
   return result;
 };
 
 const updateCowInDB = async (
+  token: string,
   id: string,
   payload: ICow
 ): Promise<ICow | null> => {
-  const userId = payload.seller;
+  const verifiedToken = jwt.verify(
+    token,
+    config.jwt.secret as Secret
+  ) as JwtPayload;
 
-  if (userId) {
-    // user from the database
-    const seller = await User.findById(userId);
-
-    if (!seller) {
-      // User not found
-      throw new ApiError(
-        404,
-        `Error: User with ID ${userId} is not found. Please verify the provided ID and try again`
-      );
-    }
-
-    // Check the user's role
-    if (seller.role !== 'seller') {
-      // User is a buyer or seller
-      throw new ApiError(403, `Error: Invalid user role`);
-    }
+  if (payload.seller) {
+    payload.seller = verifiedToken.id;
   }
 
-  const result = await cow
-    .findByIdAndUpdate(id, payload, {
-      new: true,
-    })
-    .populate('seller');
+  const result = await Cow.findByIdAndUpdate(id, payload, {
+    new: true,
+  }).populate('seller');
+
   return result;
 };
 
 const deleteCowFromDB = async (id: string): Promise<ICow | null> => {
-  const result = await cow.findByIdAndDelete(id).populate('seller');
+  const result = await Cow.findByIdAndDelete(id).populate('seller');
   return result;
 };
 
@@ -125,14 +111,13 @@ const getAllCowsFromDB = async (
     sortConditions[sortBy] = sortOrder;
   }
 
-  const result = await cow
-    .find(whereConditions)
+  const result = await Cow.find(whereConditions)
     .sort(sortConditions)
     .skip(skip)
     .limit(limit)
     .populate('seller');
 
-  const total = await cow.countDocuments(whereConditions).limit(limit);
+  const total = await Cow.countDocuments(whereConditions).limit(limit);
   return {
     meta: {
       page,

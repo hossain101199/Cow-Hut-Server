@@ -2,6 +2,7 @@ import express from 'express';
 
 import { ENUM_USER_ROLE } from '../../../enums/user';
 import auth from '../../middlewares/auth';
+import verifySeller from '../../middlewares/verifySeller';
 import { cowController } from './cow.controller';
 const router = express.Router();
 
@@ -18,9 +19,19 @@ router.get(
   cowController.getSingleCow
 );
 
-router.patch('/:id', auth(ENUM_USER_ROLE.SELLER), cowController.updateCow);
+router.patch(
+  '/:id',
+  auth(ENUM_USER_ROLE.SELLER),
+  verifySeller,
+  cowController.updateCow
+);
 
-router.delete('/:id', auth(ENUM_USER_ROLE.SELLER), cowController.deleteCow);
+router.delete(
+  '/:id',
+  auth(ENUM_USER_ROLE.SELLER),
+  verifySeller,
+  cowController.deleteCow
+);
 
 router.get(
   '/',

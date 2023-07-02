@@ -9,7 +9,12 @@ const adminSchema = new Schema<IAdmin>(
       type: String,
       required: true,
     },
-    role: { type: String, required: true, enum: ['admin'], default: 'admin' },
+    role: {
+      type: String,
+      required: true,
+      enum: ['admin'],
+      default: 'admin',
+    },
     name: {
       firstName: {
         type: String,

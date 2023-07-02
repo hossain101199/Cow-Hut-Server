@@ -48,10 +48,16 @@ const getSingleCow: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const updateCow: RequestHandler = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    throw new ApiError(401, 'Unauthorized: No token provided');
+  }
+
   const { id } = req.params;
   const updatedData = req.body;
 
-  const result = await cowService.updateCowInDB(id, updatedData);
+  const result = await cowService.updateCowInDB(token, id, updatedData);
 
   if (result === null) {
     throw new ApiError(
@@ -98,7 +104,7 @@ const getAllCows: RequestHandler = catchAsync(async (req, res) => {
   sendResponse<ICow[]>(res, {
     statusCode: 200,
     success: true,
-    message: 'User retrieved successfully',
+    message: 'Cow retrieved successfully',
     meta: result.meta,
     data: result.data,
   });

@@ -21,4 +21,4 @@ const cowSchema = new Schema<ICow>(
   }
 );
 
-export const cow = model<ICow>('cow', cowSchema);
+export const Cow = model<ICow>('cow', cowSchema);
