@@ -72,8 +72,8 @@ const createOrderInDB = async (
     // Save the updated cow document
     await selectedCow.save();
 
-    payload.buyer = selectedBuyer;
-    payload.cow = selectedCow;
+    payload.buyer = selectedBuyer.id;
+    payload.cow = selectedCow.id;
 
     const createdOrder = (await Order.create(payload)).populate([
       { path: 'cow', populate: { path: 'seller' } },
