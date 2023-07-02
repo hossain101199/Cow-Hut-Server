@@ -1,14 +1,24 @@
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { SortOrder } from 'mongoose';
 import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import { user } from '../user/user.model';
+
+import config from '../../../config';
+import { User } from '../user/user.model';
 import { cowSearchableFields } from './cow.constant';
 import { ICow, ICowFilters } from './cow.interface';
 import { cow } from './cow.model';
 
-const createCowInDB = async (payload: ICow): Promise<ICow> => {
+const createCowInDB = async (token: string, payload: ICow): Promise<ICow> => {
+  const verifiedToken = jwt.verify(
+    token,
+    config.jwt.secret as Secret
+  ) as JwtPayload;
+
+  payload.seller = verifiedToken.id;
+
   const createdCow = (await cow.create(payload)).populate('seller');
   return createdCow;
 };
@@ -26,7 +36,7 @@ const updateCowInDB = async (
 
   if (userId) {
     // user from the database
-    const seller = await user.findById(userId);
+    const seller = await User.findById(userId);
 
     if (!seller) {
       // User not found

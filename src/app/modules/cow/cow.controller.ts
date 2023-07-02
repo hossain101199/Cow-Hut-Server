@@ -9,8 +9,15 @@ import { ICow } from './cow.interface';
 import { cowService } from './cow.service';
 
 const createCow: RequestHandler = catchAsync(async (req, res) => {
+  //get authorization token
+  const token = req.headers.authorization;
+
+  if (!token) {
+    throw new ApiError(401, 'Unauthorized: No token provided');
+  }
+
   const cow = req.body;
-  const result = await cowService.createCowInDB(cow);
+  const result = await cowService.createCowInDB(token, cow);
 
   sendResponse<ICow>(res, {
     statusCode: 200,
