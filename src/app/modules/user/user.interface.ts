@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongoose';
+
 // User interface
 export type IUserName = {
   firstName: string;
@@ -5,6 +7,7 @@ export type IUserName = {
 };
 
 export type IUser = {
+  _id?: ObjectId;
   password: string;
   role: 'seller' | 'buyer';
   name: IUserName;

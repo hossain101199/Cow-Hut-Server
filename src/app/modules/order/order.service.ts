@@ -1,37 +1,46 @@
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import mongoose, { SortOrder } from 'mongoose';
+import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { label } from '../cow/cow.interface';
-import { cow as cowModel } from '../cow/cow.model';
-import { user } from '../user/user.model';
+import { Cow } from '../cow/cow.model';
+import { User } from '../user/user.model';
 import { IOrder } from './order.interface';
-import { order } from './order.model';
+import { Order } from './order.model';
 
-const createOrderInDB = async (payload: IOrder): Promise<IOrder> => {
+const createOrderInDB = async (
+  token: string,
+  payload: IOrder
+): Promise<IOrder> => {
+  const verifiedToken = jwt.verify(
+    token,
+    config.jwt.secret as Secret
+  ) as JwtPayload;
+
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    const { buyer } = payload;
+
     const { cow } = payload;
 
     // Find the cow to be purchased
-    const selectedCow = await cowModel
-      .findOne({
-        _id: cow,
-        label: 'for sale',
-      })
-      .session(session);
+    const selectedCow = await Cow.findOne({
+      _id: cow,
+      label: 'for sale',
+    }).session(session);
 
     if (!selectedCow) {
       throw new ApiError(400, `Error: Invalid cow or not available for sale.`);
     }
 
     // Find the buyer
-    const selectedBuyer = await user
-      .findOne({ _id: buyer, role: 'buyer' })
-      .session(session);
+    const selectedBuyer = await User.findOne({
+      _id: verifiedToken.id,
+      role: 'buyer',
+    }).session(session);
 
     if (!selectedBuyer) {
       // User role is not valid
@@ -48,7 +57,7 @@ const createOrderInDB = async (payload: IOrder): Promise<IOrder> => {
     // Save the updated buyer document
     await selectedBuyer.save();
 
-    const seller = await user.findById(selectedCow.seller).session(session);
+    const seller = await User.findById(selectedCow.seller).session(session);
 
     if (seller) {
       // Add the cost to the seller's income
@@ -65,7 +74,8 @@ const createOrderInDB = async (payload: IOrder): Promise<IOrder> => {
 
     payload.buyer = selectedBuyer;
     payload.cow = selectedCow;
-    const createdOrder = (await order.create(payload)).populate([
+
+    const createdOrder = (await Order.create(payload)).populate([
       { path: 'cow', populate: { path: 'seller' } },
       { path: 'buyer' },
     ]);
@@ -81,6 +91,15 @@ const createOrderInDB = async (payload: IOrder): Promise<IOrder> => {
   }
 };
 
+const getSingleOrderFromDB = async (id: string): Promise<IOrder | null> => {
+  const result = await Order.findById(id).populate([
+    { path: 'cow', populate: { path: 'seller' } },
+    { path: 'buyer' },
+  ]);
+
+  return result;
+};
+
 const getAllOrdersFromDB = async (
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<IOrder[]>> => {
@@ -92,8 +111,7 @@ const getAllOrdersFromDB = async (
     sortConditions[sortBy] = sortOrder;
   }
 
-  const result = await order
-    .find()
+  const result = await Order.find()
     .sort(sortConditions)
     .skip(skip)
     .limit(limit)
@@ -102,7 +120,7 @@ const getAllOrdersFromDB = async (
       { path: 'buyer' },
     ]);
 
-  const total = await order.countDocuments().limit(limit);
+  const total = await Order.countDocuments().limit(limit);
   return {
     meta: {
       page,
@@ -115,5 +133,6 @@ const getAllOrdersFromDB = async (
 
 export const orderService = {
   createOrderInDB,
+  getSingleOrderFromDB,
   getAllOrdersFromDB,
 };
