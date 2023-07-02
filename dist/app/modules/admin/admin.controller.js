@@ -23,24 +23,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authController = void 0;
+exports.adminController = void 0;
 const config_1 = __importDefault(require("../../../config"));
+const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
-const auth_service_1 = require("./auth.service");
-const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.body;
-    const result = yield auth_service_1.authService.createUserInDB(user);
+const admin_service_1 = require("./admin.service");
+const createAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const admin = req.body;
+    const result = yield admin_service_1.adminService.createAdminInDB(admin);
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
-        message: 'User created successfully',
+        message: 'Admin created successfully',
         data: result,
     });
 }));
-const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const loginDAta = req.body;
-    const result = yield auth_service_1.authService.loginUser(loginDAta);
+const loginAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const loginData = req.body;
+    const result = yield admin_service_1.adminService.loginAdmin(loginData);
     const { refreshToken } = result, accessToken = __rest(result, ["refreshToken"]);
     // set refresh token into cookie
     const cookieOptions = {
@@ -51,22 +52,50 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
-        message: 'User logging successfully!',
+        message: 'Admin logging successfully!',
         data: accessToken,
     });
 }));
-const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { refreshToken } = req.cookies;
-    const result = yield auth_service_1.authService.refreshToken(refreshToken);
-    (0, sendResponse_1.default)(res, {
-        statusCode: 200,
-        success: true,
-        message: 'Token has been refreshed',
-        data: result,
-    });
+const getProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    if (!token) {
+        throw new ApiError_1.default(401, 'Unauthorized: No token provided');
+    }
+    const result = yield admin_service_1.adminService.getProfileFromDB(token);
+    if (result === null) {
+        throw new ApiError_1.default(401, `Invalid token`);
+    }
+    else {
+        (0, sendResponse_1.default)(res, {
+            statusCode: 200,
+            success: true,
+            message: `Admin's information retrieved successfully`,
+            data: result,
+        });
+    }
 }));
-exports.authController = {
-    createUser,
-    loginUser,
-    refreshToken,
+const updateProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    if (!token) {
+        throw new ApiError_1.default(401, 'Unauthorized: No token provided');
+    }
+    const updatedData = req.body;
+    const result = yield admin_service_1.adminService.updateProfileInDB(token, updatedData);
+    if (result === null) {
+        throw new ApiError_1.default(401, `Invalid token`);
+    }
+    else {
+        (0, sendResponse_1.default)(res, {
+            statusCode: 200,
+            success: true,
+            message: "Admin's information updated successfully",
+            data: result,
+        });
+    }
+}));
+exports.adminController = {
+    createAdmin,
+    loginAdmin,
+    getProfile,
+    updateProfile,
 };

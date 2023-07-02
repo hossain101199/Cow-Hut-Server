@@ -38,6 +38,7 @@ const updateProfileInDB = async (
   if (name && Object.keys(name).length > 0) {
     Object.keys(name).forEach(key => {
       const nameKey = `name.${key}` as keyof Partial<IUser>;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (updatedUserData as any)[nameKey] = name[key as keyof typeof name];
     });
   }
@@ -80,6 +81,7 @@ const updateUserInDB = async (
   if (name && Object.keys(name).length > 0) {
     Object.keys(name).forEach(key => {
       const nameKey = `name.${key}` as keyof Partial<IUser>;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (updatedUserData as any)[nameKey] = name[key as keyof typeof name];
     });
   }

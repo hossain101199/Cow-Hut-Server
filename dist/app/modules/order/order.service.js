@@ -13,33 +13,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderService = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const config_1 = __importDefault(require("../../../config"));
 const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const cow_interface_1 = require("../cow/cow.interface");
 const cow_model_1 = require("../cow/cow.model");
 const user_model_1 = require("../user/user.model");
 const order_model_1 = require("./order.model");
-const createOrderInDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const createOrderInDB = (token, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const verifiedToken = jsonwebtoken_1.default.verify(token, config_1.default.jwt.secret);
     const session = yield mongoose_1.default.startSession();
     try {
         session.startTransaction();
-        const { buyer } = payload;
         const { cow } = payload;
         // Find the cow to be purchased
-        const selectedCow = yield cow_model_1.cow
-            .findOne({
+        const selectedCow = yield cow_model_1.Cow.findOne({
             _id: cow,
             label: 'for sale',
-        })
-            .session(session);
+        }).session(session);
         if (!selectedCow) {
             throw new ApiError_1.default(400, `Error: Invalid cow or not available for sale.`);
         }
         // Find the buyer
-        const selectedBuyer = yield user_model_1.user
-            .findOne({ _id: buyer, role: 'buyer' })
-            .session(session);
+        const selectedBuyer = yield user_model_1.User.findOne({
+            _id: verifiedToken.id,
+            role: 'buyer',
+        }).session(session);
         if (!selectedBuyer) {
             // User role is not valid
             throw new ApiError_1.default(400, `Error: Invalid buyer or insufficient role.`);
@@ -51,7 +52,7 @@ const createOrderInDB = (payload) => __awaiter(void 0, void 0, void 0, function*
         selectedBuyer.budget -= selectedCow.price;
         // Save the updated buyer document
         yield selectedBuyer.save();
-        const seller = yield user_model_1.user.findById(selectedCow.seller).session(session);
+        const seller = yield user_model_1.User.findById(selectedCow.seller).session(session);
         if (seller) {
             // Add the cost to the seller's income
             seller.income += selectedCow.price;
@@ -62,9 +63,9 @@ const createOrderInDB = (payload) => __awaiter(void 0, void 0, void 0, function*
         selectedCow.label = cow_interface_1.label.SoldOut;
         // Save the updated cow document
         yield selectedCow.save();
-        payload.buyer = selectedBuyer;
-        payload.cow = selectedCow;
-        const createdOrder = (yield order_model_1.order.create(payload)).populate([
+        payload.buyer = selectedBuyer.id;
+        payload.cow = selectedCow.id;
+        const createdOrder = (yield order_model_1.Order.create(payload)).populate([
             { path: 'cow', populate: { path: 'seller' } },
             { path: 'buyer' },
         ]);
@@ -78,14 +79,33 @@ const createOrderInDB = (payload) => __awaiter(void 0, void 0, void 0, function*
         throw error;
     }
 });
-const getAllOrdersFromDB = (paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
+const getSingleOrderFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_model_1.Order.findById(id).populate([
+        { path: 'cow', populate: { path: 'seller' } },
+        { path: 'buyer' },
+    ]);
+    return result;
+});
+const getAllOrdersFromDB = (token, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, limit, skip, sortBy, sortOrder } = paginationHelper_1.paginationHelpers.calculatePagination(paginationOptions);
+    const verifiedToken = jsonwebtoken_1.default.verify(token, config_1.default.jwt.secret);
     const sortConditions = {};
     if (sortBy && sortOrder) {
         sortConditions[sortBy] = sortOrder;
     }
-    const result = yield order_model_1.order
-        .find()
+    const whereConditions = {};
+    // Check the role of the verified token
+    if (verifiedToken.role === 'buyer') {
+        // If the role is 'buyer', find orders where the buyer field matches the verifiedToken.id
+        whereConditions.buyer = verifiedToken.id;
+    }
+    else if (verifiedToken.role === 'seller') {
+        // If the role is 'seller', find orders by populating the 'cow' field and matching the seller's id
+        whereConditions.cow = {
+            $in: yield cow_model_1.Cow.find({ seller: verifiedToken.id }).distinct('_id'),
+        };
+    }
+    const result = yield order_model_1.Order.find(whereConditions)
         .sort(sortConditions)
         .skip(skip)
         .limit(limit)
@@ -93,7 +113,7 @@ const getAllOrdersFromDB = (paginationOptions) => __awaiter(void 0, void 0, void
         { path: 'cow', populate: { path: 'seller' } },
         { path: 'buyer' },
     ]);
-    const total = yield order_model_1.order.countDocuments().limit(limit);
+    const total = yield order_model_1.Order.countDocuments(whereConditions).limit(limit);
     return {
         meta: {
             page,
@@ -105,5 +125,6 @@ const getAllOrdersFromDB = (paginationOptions) => __awaiter(void 0, void 0, void
 });
 exports.orderService = {
     createOrderInDB,
+    getSingleOrderFromDB,
     getAllOrdersFromDB,
 };

@@ -21,8 +21,13 @@ const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const cow_constant_1 = require("./cow.constant");
 const cow_service_1 = require("./cow.service");
 const createCow = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //get authorization token
+    const token = req.headers.authorization;
+    if (!token) {
+        throw new ApiError_1.default(401, 'Unauthorized: No token provided');
+    }
     const cow = req.body;
-    const result = yield cow_service_1.cowService.createCowInDB(cow);
+    const result = yield cow_service_1.cowService.createCowInDB(token, cow);
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
@@ -46,9 +51,13 @@ const getSingleCow = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     }
 }));
 const updateCow = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    if (!token) {
+        throw new ApiError_1.default(401, 'Unauthorized: No token provided');
+    }
     const { id } = req.params;
     const updatedData = req.body;
-    const result = yield cow_service_1.cowService.updateCowInDB(id, updatedData);
+    const result = yield cow_service_1.cowService.updateCowInDB(token, id, updatedData);
     if (result === null) {
         throw new ApiError_1.default(404, `Error: Cow with ID ${id} is not found. Please verify the provided ID and try again`);
     }
@@ -83,7 +92,7 @@ const getAllCows = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
-        message: 'User retrieved successfully',
+        message: 'Cow retrieved successfully',
         meta: result.meta,
         data: result.data,
     });

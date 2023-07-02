@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.order = void 0;
+exports.Order = void 0;
 const mongoose_1 = require("mongoose");
 const orderSchema = new mongoose_1.Schema({
     cow: { type: mongoose_1.Schema.Types.ObjectId, ref: 'cow', required: true },
@@ -11,4 +11,4 @@ const orderSchema = new mongoose_1.Schema({
         virtuals: true,
     },
 });
-exports.order = (0, mongoose_1.model)('order', orderSchema);
+exports.Order = (0, mongoose_1.model)('order', orderSchema);

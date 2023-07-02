@@ -24,43 +24,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cowService = void 0;
-const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
-const user_model_1 = require("../user/user.model");
+const config_1 = __importDefault(require("../../../config"));
 const cow_constant_1 = require("./cow.constant");
 const cow_model_1 = require("./cow.model");
-const createCowInDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const createdCow = (yield cow_model_1.cow.create(payload)).populate('seller');
+const createCowInDB = (token, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const verifiedToken = jsonwebtoken_1.default.verify(token, config_1.default.jwt.secret);
+    payload.seller = verifiedToken.id;
+    const createdCow = (yield cow_model_1.Cow.create(payload)).populate('seller');
     return createdCow;
 });
 const getSingleCowFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield cow_model_1.cow.findById(id).populate('seller');
+    const result = yield cow_model_1.Cow.findById(id).populate('seller');
     return result;
 });
-const updateCowInDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = payload.seller;
-    if (userId) {
-        // user from the database
-        const seller = yield user_model_1.user.findById(userId);
-        if (!seller) {
-            // User not found
-            throw new ApiError_1.default(404, `Error: User with ID ${userId} is not found. Please verify the provided ID and try again`);
-        }
-        // Check the user's role
-        if (seller.role !== 'seller') {
-            // User is a buyer or seller
-            throw new ApiError_1.default(403, `Error: Invalid user role`);
-        }
+const updateCowInDB = (token, id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const verifiedToken = jsonwebtoken_1.default.verify(token, config_1.default.jwt.secret);
+    if (payload.seller) {
+        payload.seller = verifiedToken.id;
     }
-    const result = yield cow_model_1.cow
-        .findByIdAndUpdate(id, payload, {
+    const result = yield cow_model_1.Cow.findByIdAndUpdate(id, payload, {
         new: true,
-    })
-        .populate('seller');
+    }).populate('seller');
     return result;
 });
 const deleteCowFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield cow_model_1.cow.findByIdAndDelete(id).populate('seller');
+    const result = yield cow_model_1.Cow.findByIdAndDelete(id).populate('seller');
     return result;
 });
 const getAllCowsFromDB = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
@@ -111,13 +101,12 @@ const getAllCowsFromDB = (filters, paginationOptions) => __awaiter(void 0, void 
     if (sortBy && sortOrder) {
         sortConditions[sortBy] = sortOrder;
     }
-    const result = yield cow_model_1.cow
-        .find(whereConditions)
+    const result = yield cow_model_1.Cow.find(whereConditions)
         .sort(sortConditions)
         .skip(skip)
         .limit(limit)
         .populate('seller');
-    const total = yield cow_model_1.cow.countDocuments(whereConditions).limit(limit);
+    const total = yield cow_model_1.Cow.countDocuments(whereConditions).limit(limit);
     return {
         meta: {
             page,

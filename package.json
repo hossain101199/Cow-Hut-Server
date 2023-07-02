@@ -1,5 +1,5 @@
 {
-  "name": "Digital-Cow-Hut",
+  "name": "cow-hut-admin-with-auth",
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",

@@ -14,21 +14,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userController = void 0;
 const pagination_1 = require("../../../constants/pagination");
+const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const pick_1 = __importDefault(require("../../../shared/pick"));
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const user_constant_1 = require("./user.constant");
 const user_service_1 = require("./user.service");
+const getProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    if (!token) {
+        throw new ApiError_1.default(401, 'Unauthorized: No token provided');
+    }
+    const result = yield user_service_1.userService.getProfileFromDB(token);
+    if (result === null) {
+        throw new ApiError_1.default(401, `Invalid token`);
+    }
+    else {
+        (0, sendResponse_1.default)(res, {
+            statusCode: 200,
+            success: true,
+            message: `User's information retrieved successfully`,
+            data: result,
+        });
+    }
+}));
+const updateProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    if (!token) {
+        throw new ApiError_1.default(401, 'Unauthorized: No token provided');
+    }
+    const updatedData = req.body;
+    const result = yield user_service_1.userService.updateProfileInDB(token, updatedData);
+    if (result === null) {
+        throw new ApiError_1.default(401, `Invalid token`);
+    }
+    else {
+        (0, sendResponse_1.default)(res, {
+            statusCode: 200,
+            success: true,
+            message: "User's information Updated successfully",
+            data: result,
+        });
+    }
+}));
 const getSingleUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const result = yield user_service_1.userService.getSingleUserFromDB(id);
     if (result === null) {
-        (0, sendResponse_1.default)(res, {
-            statusCode: 404,
-            success: false,
-            message: `Error: User with ID ${id} is not found. Please verify the provided ID and try again`,
-            data: result,
-        });
+        throw new ApiError_1.default(404, `Error: User with ID ${id} is not found. Please verify the provided ID and try again`);
     }
     else {
         (0, sendResponse_1.default)(res, {
@@ -44,12 +77,7 @@ const updateUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     const updatedData = req.body;
     const result = yield user_service_1.userService.updateUserInDB(id, updatedData);
     if (result === null) {
-        (0, sendResponse_1.default)(res, {
-            statusCode: 404,
-            success: false,
-            message: `Error: User with ID ${id} is not found. Please verify the provided ID and try again`,
-            data: result,
-        });
+        throw new ApiError_1.default(404, `Error: User with ID ${id} is not found. Please verify the provided ID and try again`);
     }
     else {
         (0, sendResponse_1.default)(res, {
@@ -64,12 +92,7 @@ const deleteUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     const { id } = req.params;
     const result = yield user_service_1.userService.deleteUserFromDB(id);
     if (result === null) {
-        (0, sendResponse_1.default)(res, {
-            statusCode: 404,
-            success: false,
-            message: `Error: User with ID ${id} is not found. Please verify the provided ID and try again`,
-            data: result,
-        });
+        throw new ApiError_1.default(404, `Error: User with ID ${id} is not found. Please verify the provided ID and try again`);
     }
     else {
         (0, sendResponse_1.default)(res, {
@@ -93,6 +116,8 @@ const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
     });
 }));
 exports.userController = {
+    getProfile,
+    updateProfile,
     getSingleUser,
     updateUser,
     deleteUser,

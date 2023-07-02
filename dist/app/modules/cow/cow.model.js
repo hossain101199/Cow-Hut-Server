@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cow = void 0;
+exports.Cow = void 0;
 const mongoose_1 = require("mongoose");
 const cow_interface_1 = require("./cow.interface");
 const cowSchema = new mongoose_1.Schema({
@@ -19,4 +19,4 @@ const cowSchema = new mongoose_1.Schema({
         virtuals: true,
     },
 });
-exports.cow = (0, mongoose_1.model)('cow', cowSchema);
+exports.Cow = (0, mongoose_1.model)('cow', cowSchema);
