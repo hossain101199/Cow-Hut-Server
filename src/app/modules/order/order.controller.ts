@@ -45,9 +45,18 @@ const getSingleOrder: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const getAllOrders: RequestHandler = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    throw new ApiError(401, 'Unauthorized: No token provided');
+  }
+
   const paginationOptions = pick(req.query, paginationFields);
 
-  const result = await orderService.getAllOrdersFromDB(paginationOptions);
+  const result = await orderService.getAllOrdersFromDB(
+    token,
+    paginationOptions
+  );
 
   sendResponse<IOrder[]>(res, {
     statusCode: 200,

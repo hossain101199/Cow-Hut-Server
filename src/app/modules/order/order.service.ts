@@ -101,17 +101,36 @@ const getSingleOrderFromDB = async (id: string): Promise<IOrder | null> => {
 };
 
 const getAllOrdersFromDB = async (
+  token: string,
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<IOrder[]>> => {
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
+
+  const verifiedToken = jwt.verify(
+    token,
+    config.jwt.secret as Secret
+  ) as JwtPayload;
 
   const sortConditions: { [key: string]: SortOrder } = {};
   if (sortBy && sortOrder) {
     sortConditions[sortBy] = sortOrder;
   }
 
-  const result = await Order.find()
+  const whereConditions: { [key: string]: any } = {};
+
+  // Check the role of the verified token
+  if (verifiedToken.role === 'buyer') {
+    // If the role is 'buyer', find orders where the buyer field matches the verifiedToken.id
+    whereConditions.buyer = verifiedToken.id;
+  } else if (verifiedToken.role === 'seller') {
+    // If the role is 'seller', find orders by populating the 'cow' field and matching the seller's id
+    whereConditions.cow = {
+      $in: await Cow.find({ seller: verifiedToken.id }).distinct('_id'),
+    };
+  }
+
+  const result = await Order.find(whereConditions)
     .sort(sortConditions)
     .skip(skip)
     .limit(limit)
@@ -120,7 +139,7 @@ const getAllOrdersFromDB = async (
       { path: 'buyer' },
     ]);
 
-  const total = await Order.countDocuments().limit(limit);
+  const total = await Order.countDocuments(whereConditions).limit(limit);
   return {
     meta: {
       page,
