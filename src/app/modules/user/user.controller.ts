@@ -44,7 +44,7 @@ const updateProfile: RequestHandler = catchAsync(async (req, res) => {
     sendResponse<IUser>(res, {
       statusCode: 200,
       success: true,
-      message: "User's information retrieved successfully",
+      message: "User's information Updated successfully",
       data: result,
     });
   }

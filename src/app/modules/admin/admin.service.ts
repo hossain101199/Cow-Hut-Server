@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 import { ILogin, ILoginUserResponse } from '../../../interfaces/common';
@@ -53,7 +53,62 @@ const loginAdmin = async (payload: ILogin): Promise<ILoginUserResponse> => {
   }
 };
 
+const getProfileFromDB = async (payload: string): Promise<IAdmin | null> => {
+  const verifiedToken = jwt.verify(
+    payload,
+    config.jwt.secret as Secret
+  ) as JwtPayload;
+  if (verifiedToken) {
+    const result = await Admin.findById(verifiedToken.id);
+    return result;
+  } else {
+    throw new ApiError(403, 'Forbidden');
+  }
+};
+
+const updateProfileInDB = async (
+  token: string,
+  payload: IAdmin
+): Promise<IAdmin | null> => {
+  const verifiedToken = jwt.verify(
+    token,
+    config.jwt.secret as Secret
+  ) as JwtPayload;
+  const { name, password, ...adminData } = payload;
+
+  const updatedUserData: Partial<IAdmin> = { ...adminData };
+
+  if (name && Object.keys(name).length > 0) {
+    Object.keys(name).forEach(key => {
+      const nameKey = `name.${key}` as keyof Partial<IAdmin>;
+      (updatedUserData as any)[nameKey] = name[key as keyof typeof name];
+    });
+  }
+  if (password) {
+    const hashedPassword = await bcrypt.hash(
+      password,
+      Number(config.bcrypt_salt_rounds)
+    );
+    updatedUserData.password = hashedPassword;
+  }
+
+  if (verifiedToken) {
+    const result = await Admin.findByIdAndUpdate(
+      verifiedToken.id,
+      updatedUserData,
+      {
+        new: true,
+      }
+    );
+
+    return result;
+  } else {
+    throw new ApiError(403, 'Forbidden');
+  }
+};
 export const adminService = {
   createAdminInDB,
   loginAdmin,
+  getProfileFromDB,
+  updateProfileInDB,
 };

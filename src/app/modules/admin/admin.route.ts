@@ -7,4 +7,8 @@ router.post('/create-admin', adminController.createAdmin);
 
 router.post('/login', adminController.loginAdmin);
 
+router.get('/my-profile', adminController.getProfile);
+
+router.patch('/my-profile', adminController.updateProfile);
+
 export const adminRoutes = router;
