@@ -74,11 +74,94 @@
 
 ## **ADMINS**
 
+## Endpoint: POST https://cow-hut-auth-hossain101199.vercel.app/api/v1/admins/create-admin
+
+**Description:** This endpoint is used to sign up and create a new admin.
+
+**Request Body:**
+
+```json
+{
+  "password": "G3c7b1s9A4j2P",
+  "role": "admin",
+  "name": {
+    "firstName": "Emma",
+    "lastName": "Jackson"
+  },
+  "phoneNumber": "0987654321",
+  "address": "987 Elm St"
+}
+```
+
+## Endpoint: POST https://cow-hut-auth-hossain101199.vercel.app/api/v1/admins/login
+
+**Description:** This endpoint is used to sign in admin.
+
+**Request Body:**
+
+```json
+{
+  "phoneNumber": "0987654321",
+  "password": "G3c7b1s9A4j2P"
+}
+```
+
+**Response:** When the admin logs in, they will receive an access token in the response, and a refresh token will be securely stored as a cookie.
+
+## Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/admins/my-profile
+
+**Description:** This endpoint allows the admin to fetch their own profile information.
+
+**Headers:** `Authorization` : [your_access_token]
+
+## Endpoint: PATCH https://cow-hut-auth-hossain101199.vercel.app/api/v1/admins/my-profile
+
+**Description:** This endpoint allows the admin to modify their own profile information.
+
+**Headers:** `Authorization` : [your_access_token]
+
+**Request Body:**
+
+```json
+{
+  "name": {
+    "firstName": "modified David"
+  }
+}
+```
+
 ## **USERS**
+
+## Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/my-profile
+
+**Description:** This endpoint allows the user to fetch their own profile information.
+
+**Headers:** `Authorization` : [your_access_token]
+
+## Endpoint: PATCH https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/my-profile
+
+**Description:** This endpoint allows the user to modify their own profile information.
+
+**Headers:** `Authorization` : [your_access_token]
+
+**Request Body:**
+
+```json
+{
+  "name": {
+    "firstName": "Jackson",
+    "lastName": "Emma"
+  }
+}
+```
 
 ## Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users
 
 **Description:** This endpoint is used to retrieve a list of users.
+
+**Access:** This endpoint is restricted to administrators only.
+
+**Headers:** `Authorization` : [your_access_token]
 
 **Query Parameters:**
 
@@ -104,6 +187,10 @@
 
 **Description:** This endpoint is used to retrieve a single user by their ID.
 
+**Access:** This endpoint is restricted to administrators only.
+
+**Headers:** `Authorization` : [your_access_token]
+
 **Example Request:**
 
 - Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/648e25f482659a50fb5500b8
@@ -112,6 +199,10 @@
 ## Endpoint: PATCH https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/:id
 
 **Description:** This endpoint is used to update a user by their ID.
+
+**Access:** This endpoint is restricted to administrators only.
+
+**Headers:** `Authorization` : [your_access_token]
 
 **Example Request:**
 
@@ -135,6 +226,10 @@
 ## Endpoint: DELETE https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/:id
 
 **Description:** This endpoint is used to delete a user by their ID.
+
+**Access:** This endpoint is restricted to administrators only.
+
+**Headers:** `Authorization` : [your_access_token]
 
 **Example Request:**
 
