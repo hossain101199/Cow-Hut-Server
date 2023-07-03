@@ -1,6 +1,6 @@
 # Cow hut API Documentation:
 
-## **AUTH**
+# **AUTH**
 
 ## Endpoint: POST https://cow-hut-auth-hossain101199.vercel.app/api/v1/auth/signup
 
@@ -72,7 +72,7 @@
 
 **Description:** This endpoint is used to get a new access token.
 
-## **ADMINS**
+# **ADMINS**
 
 ## Endpoint: POST https://cow-hut-auth-hossain101199.vercel.app/api/v1/admins/create-admin
 
@@ -112,13 +112,13 @@
 
 **Description:** This endpoint allows the admin to fetch their own profile information.
 
-**Headers:** `Authorization` : [your_access_token]
+**Headers:** `Authorization` : [access_token]
 
 ## Endpoint: PATCH https://cow-hut-auth-hossain101199.vercel.app/api/v1/admins/my-profile
 
 **Description:** This endpoint allows the admin to modify their own profile information.
 
-**Headers:** `Authorization` : [your_access_token]
+**Headers:** `Authorization` : [access_token]
 
 **Request Body:**
 
@@ -130,19 +130,19 @@
 }
 ```
 
-## **USERS**
+# **USERS**
 
 ## Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/my-profile
 
 **Description:** This endpoint allows the user to fetch their own profile information.
 
-**Headers:** `Authorization` : [your_access_token]
+**Headers:** `Authorization` : [access_token]
 
 ## Endpoint: PATCH https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/my-profile
 
 **Description:** This endpoint allows the user to modify their own profile information.
 
-**Headers:** `Authorization` : [your_access_token]
+**Headers:** `Authorization` : [access_token]
 
 **Request Body:**
 
@@ -161,7 +161,7 @@
 
 **Access:** This endpoint is restricted to administrators only.
 
-**Headers:** `Authorization` : [your_access_token]
+**Headers:** `Authorization` : [access_token]
 
 **Query Parameters:**
 
@@ -189,7 +189,7 @@
 
 **Access:** This endpoint is restricted to administrators only.
 
-**Headers:** `Authorization` : [your_access_token]
+**Headers:** `Authorization` : [access_token]
 
 **Example Request:**
 
@@ -202,7 +202,7 @@
 
 **Access:** This endpoint is restricted to administrators only.
 
-**Headers:** `Authorization` : [your_access_token]
+**Headers:** `Authorization` : [access_token]
 
 **Example Request:**
 
@@ -229,50 +229,45 @@
 
 **Access:** This endpoint is restricted to administrators only.
 
-**Headers:** `Authorization` : [your_access_token]
+**Headers:** `Authorization` : [access_token]
 
 **Example Request:**
 
 - Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/648e25f482659a50fb5500b8
 - Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//users/648e25d782659a50fb5500b2
 
+# **COWS**
+
 ## Endpoint: POST https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows
 
 **Description:** This endpoint is used to create a new cow.
 
+**Access:** This endpoint is restricted to sellers only.
+
+**Headers:** `Authorization` : [access_token]
+
 **Request Body:**
 
-```
+```json
 {
-  "name": "Cow 40",
-  "age": 2,
-  "price": 2000,
-  "location": "Mymensingh",
-  "breed": "Guernsey",
-  "weight": 480,
-  "label": "for sale",
-  "category": "Dairy",
-  "seller": "648e25c082659a50fb5500ae"
-}
-```
-
-```
-{
-  "name": "Cow 39",
-  "age": 4,
-  "price": 2200,
-  "location": "Rangpur",
-  "breed": "Limousin",
-  "weight": 550,
-  "label": "for sale",
-  "category": "Dairy",
-  "seller": "648e25d782659a50fb5500b2"
+  "name": "Cow10",
+  "age": 3,
+  "price": 530,
+  "location": "Chattogram",
+  "breed": "Ayrshire",
+  "weight": 500,
+  "label": "sold out",
+  "category": "Dairy"
 }
 ```
 
 ## Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows
 
 **Description:** This endpoint is used to retrieve a list of cows based on specified filters and pagination options.
+
+**Access:** This endpoint is accessible to all users, including admins, buyers, and sellers.
+
+**Headers:** `Authorization` : [access_token]
 
 **Query Parameters:**
 
@@ -299,6 +294,10 @@
 
 **Description:** This endpoint is used to retrieve a single cow by their ID.
 
+**Access:** This endpoint is accessible to all users, including admins, buyers, and sellers.
+
+**Headers:** `Authorization` : [access_token]
+
 **Example Request:**
 
 - Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/648e2889c0c0f820ca1307c4
@@ -307,6 +306,10 @@
 ## Endpoint: PATCH https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/:id
 
 **Description:** This endpoint is used to update a cow by their ID.
+
+**Access:** This endpoint is restricted to cow sellers only.
+
+**Headers:** `Authorization` : [access_token]
 
 **Example Request:**
 
@@ -331,31 +334,63 @@
 
 **Description:** This endpoint is used to delete a cow by their ID.
 
+**Access:** This endpoint is restricted to cow sellers only.
+
+**Headers:** `Authorization` : [access_token]
+
 **Example Request:**
 
 - Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/648e2889c0c0f820ca1307c4
 - Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//cows/648e2876c0c0f820ca1307c0
 
+# **ORDERS**
+
 ## Endpoint: POST https://cow-hut-auth-hossain101199.vercel.app/api/v1/orders
 
-**Description:** This endpoint allows you to create a new order.
+**Description:** This endpoint is used to create an order.
+
+**Access:** This endpoint is restricted to buyers only.
+
+**Headers:** `Authorization` : [access_token]
 
 **Request Body:**
 
 ```
 {
     "cow": "648e2889c0c0f820ca1307c4",
-    "buyer": "648e1c611e198cfd20321fad"
 }
 ```
 
 - `cow` : The ID of the cow being purchased.
-- `buyer` : The ID of the buyer placing the order.
 
 ## Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/orders
 
-**Description:** This endpoint allows you to retrieve a list of all orders.
+**Description:** This endpoint is used to retrieve a list of orders.
+
+**Access:**
+
+- Admin: Admin users can access this endpoint to retrieve all orders across the platform.
+- Buyer: Buyers can access this endpoint to retrieve their own orders.
+- Seller: Sellers can access this endpoint to retrieve orders associated with their account.
+
+**Headers:** `Authorization` : [access_token]
 
 **Example Request:**
 
 - Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/orders
+
+## Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/orders/:id
+
+**Description:** This endpoint is used to retrieve a specific order based on its ID.
+
+**Access:**
+
+- Admin: Admin can access this endpoint to retrieve any order, regardless of the associated buyer or seller.
+- Seller: Sellers can access this endpoint to retrieve orders associated with their account.
+- Buyer: Buyers can access this endpoint to retrieve their own orders.
+
+**Headers:** `Authorization` : [access_token]
+
+**Example Request:**
+
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/orders/648e2889c0c0f820ca1307c4
