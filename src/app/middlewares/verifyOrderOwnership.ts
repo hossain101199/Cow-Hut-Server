@@ -48,7 +48,6 @@ const verifyOrderOwnership = async (
 
     next();
   } catch (error) {
-    // Handle any errors that occur during verification
     next(error);
   }
 };

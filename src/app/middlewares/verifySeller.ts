@@ -26,13 +26,7 @@ const verifySeller = async (
     const { id } = req.params;
 
     // // Find the cow by ID
-    // const cow = await Cow.findById(id);
     const cow = await Cow.findOne({ _id: id, seller: verifiedToken.id });
-
-    // // Check if the authenticated user ID is not equal to the seller ID of the cow
-    // if (verifiedToken.id !== cow?.seller.toString()) {
-    //   throw new ApiError(403, 'You are not authorized to perform this action');
-    // }
 
     if (!cow) {
       throw new ApiError(403, 'You are not authorized to perform this action');
