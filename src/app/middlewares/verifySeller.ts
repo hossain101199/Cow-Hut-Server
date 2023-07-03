@@ -33,7 +33,7 @@ const verifySeller = async (
     // if (verifiedToken.id !== cow?.seller.toString()) {
     //   throw new ApiError(403, 'You are not authorized to perform this action');
     // }
-    console.log(cow);
+
     if (!cow) {
       throw new ApiError(403, 'You are not authorized to perform this action');
     }
