@@ -93,6 +93,7 @@ const getAllOrdersFromDB = (token, paginationOptions) => __awaiter(void 0, void 
     if (sortBy && sortOrder) {
         sortConditions[sortBy] = sortOrder;
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const whereConditions = {};
     // Check the role of the verified token
     if (verifiedToken.role === 'buyer') {

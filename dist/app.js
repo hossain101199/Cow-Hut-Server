@@ -26,7 +26,7 @@ app.use(express_1.default.urlencoded({ extended: true }));
 // Testing
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // throw new Error('Testing error logger')
-    res.send('Hello from Digital Cow Hut');
+    res.send('Hello from Cow Hut auth');
 }));
 // Application routes
 app.use('/api/v1', routes_1.default);

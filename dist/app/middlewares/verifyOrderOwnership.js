@@ -45,7 +45,6 @@ const verifyOrderOwnership = (req, res, next) => __awaiter(void 0, void 0, void 
         next();
     }
     catch (error) {
-        // Handle any errors that occur during verification
         next(error);
     }
 });
