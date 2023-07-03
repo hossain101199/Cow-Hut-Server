@@ -1,5 +1,7 @@
 # Cow hut API Documentation:
 
+## Live Link: https://cow-hut-auth-hossain101199.vercel.app/
+
 # **AUTH**
 
 ## Endpoint: POST https://cow-hut-auth-hossain101199.vercel.app/api/v1/auth/signup
