@@ -117,6 +117,7 @@ const getAllOrdersFromDB = async (
     sortConditions[sortBy] = sortOrder;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const whereConditions: { [key: string]: any } = {};
 
   // Check the role of the verified token

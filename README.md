@@ -193,8 +193,8 @@
 
 **Example Request:**
 
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/648e25f482659a50fb5500b8
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//users/648e25d782659a50fb5500b2
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/64a2d72b97e4125207801e05
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//users/64a2d74097e4125207801e07
 
 ## Endpoint: PATCH https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/:id
 
@@ -206,20 +206,14 @@
 
 **Example Request:**
 
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/648e25f482659a50fb5500b8
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//users/648e25d782659a50fb5500b2
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/64a2d74097e4125207801e07
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//users/64a2d72b97e4125207801e05
 
 **Request Body:**
 
-```
+```json
 {
-  "password": "password25",
-}
-```
-
-```
-{
-  "budget": 5000,
+  "budget": 5000
 }
 ```
 
@@ -233,8 +227,8 @@
 
 **Example Request:**
 
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/648e25f482659a50fb5500b8
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//users/648e25d782659a50fb5500b2
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/users/64a2d72b97e4125207801e05
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//users/64a2d74097e4125207801e07
 
 # **COWS**
 
@@ -300,8 +294,8 @@
 
 **Example Request:**
 
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/648e2889c0c0f820ca1307c4
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//cows/648e2876c0c0f820ca1307c0
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/64a2d81497e4125207801e11
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//cows/64a2f259f49cd33c1636b8c2
 
 ## Endpoint: PATCH https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/:id
 
@@ -313,8 +307,8 @@
 
 **Example Request:**
 
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/648e2889c0c0f820ca1307c4
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//cows/648e2876c0c0f820ca1307c0
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/64a2d81497e4125207801e11
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//cows/64a2f259f49cd33c1636b8c2
 
 **Request Body:**
 
@@ -340,8 +334,9 @@
 
 **Example Request:**
 
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/648e2889c0c0f820ca1307c4
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//cows/648e2876c0c0f820ca1307c0
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/cows/64a2d81497e4125207801e11
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//cows/64a2f259f49cd33c1636b8c2
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1//cows/64a2f26cf49cd33c1636b8c5
 
 # **ORDERS**
 
@@ -393,4 +388,4 @@
 
 **Example Request:**
 
-- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/orders/648e2889c0c0f820ca1307c4
+- Endpoint: GET https://cow-hut-auth-hossain101199.vercel.app/api/v1/orders/64a2fb42a5b37c199c5ccfe5
